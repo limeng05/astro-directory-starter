@@ -8,7 +8,8 @@ async function walk(dir) {
 const base = '/astro-directory-starter';
 const origin = 'https://limeng05.github.io';
 const files = await walk('dist');
-const pages = files.filter(file => file.endsWith('.html'));
+// Search Console verification files are plain text served with an .html suffix.
+const pages = files.filter(file => file.endsWith('.html') && !/^dist\/google[a-f0-9]+\.html$/.test(file));
 assert.equal(pages.length, 16, 'Update expected route coverage when changing sample data');
 for (const file of pages) {
   const html = await readFile(file, 'utf8');
