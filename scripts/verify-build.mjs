@@ -5,6 +5,8 @@ async function walk(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
   return (await Promise.all(entries.map(entry => entry.isDirectory() ? walk(join(dir, entry.name)) : join(dir, entry.name)))).flat();
 }
+const base = '/astro-directory-starter';
+const origin = 'https://limeng05.github.io';
 const files = await walk('dist');
 const pages = files.filter(file => file.endsWith('.html'));
 assert.equal(pages.length, 16, 'Update expected route coverage when changing sample data');
@@ -13,8 +15,11 @@ for (const file of pages) {
   assert.match(html, /<title>.+?<\/title>/, `${file}: title`);
   assert.match(html, /name="description"/, `${file}: description`);
   assert.match(html, /rel="canonical"/, `${file}: canonical`);
+  assert.ok(html.includes(`href="${origin}${base}/`), `${file}: canonical base`);
   for (const [, href] of html.matchAll(/href="(\/[^"#?]*)[^\"]*"/g)) {
-    const target = href.endsWith('/') ? `dist${href}index.html` : `dist${href}`;
+    assert.ok(href.startsWith(`${base}/`), `${file}: missing base in ${href}`);
+    const local = href.slice(base.length);
+    const target = local.endsWith('/') ? `dist${local}index.html` : `dist${local}`;
     await access(target).catch(() => assert.fail(`${file}: broken internal link ${href}`));
   }
   if (file.includes('/tools/')) {
@@ -35,7 +40,6 @@ for (const domain of ['navsprout.com', 'ainavly.com']) {
 }
 const sitemap = await readFile('dist/sitemap.xml', 'utf8');
 assert.equal((sitemap.match(/<loc>/g) || []).length, 15);
-const origin = process.env.SITE_URL || 'https://example.com';
-assert.ok(sitemap.includes(new URL('/tools/navsprout/', origin).href));
-assert.ok((await readFile('dist/robots.txt', 'utf8')).includes(new URL('/sitemap.xml', origin).href));
+assert.ok(sitemap.includes(new URL(`${base}/tools/navsprout/`, origin).href));
+assert.ok((await readFile('dist/robots.txt', 'utf8')).includes(new URL(`${base}/sitemap.xml`, origin).href));
 console.log(`Verified ${pages.length} HTML pages, internal links, pagination, metadata, JSON-LD, and sitemap.`);

@@ -4,7 +4,7 @@
 
 Each indexable page has a title, description, self-referencing canonical, and Open Graph metadata. Detail pages include Schema.org `WebPage` data describing the linked website; they do not invent ratings, prices, or reviews. A generated sitemap includes all public content pages. The 404 page uses `noindex`.
 
-Set `SITE_URL` before deploying. Inspect `dist/sitemap.xml`, `dist/robots.txt`, and a generated detail page to confirm the public origin is correct. Search query parameters are intentionally excluded from canonical URLs so every filter combination does not create a new canonical page.
+Set `site` and `base` in `astro.config.mjs` before deploying. Inspect `dist/sitemap.xml`, `dist/robots.txt`, and a generated detail page to confirm the public origin is correct. Search query parameters are intentionally excluded from canonical URLs so every filter combination does not create a new canonical page.
 
 ## Write pages that help readers
 

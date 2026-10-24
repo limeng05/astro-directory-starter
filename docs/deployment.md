@@ -1,18 +1,26 @@
-# Deploy to Cloudflare Pages
+# Deployment
 
-This project outputs static HTML. It does not require the Cloudflare SSR adapter.
+## GitHub Pages (default)
 
-1. Push the repository to your GitHub account.
-2. In Cloudflare, create a Pages project and connect this repository.
-3. Set the build command to `npm run build` and the output directory to `dist`.
-4. Set the build environment variable `NODE_VERSION` to `24`.
-5. Set `SITE_URL` to the final public origin, such as `https://your-project.pages.dev`.
-6. Deploy. If you add a custom domain, update `SITE_URL` and rebuild.
+The default `astro.config.mjs` uses `site: 'https://limeng05.github.io'` and `base: '/astro-directory-starter'`. Internal links, assets, canonical URLs, and the sitemap support that subpath. Astro's pagination URLs already include the configured base.
 
-Use the repository root as the build root. Do not upload `.env`, `node_modules`, or local credentials. `.env.example` documents the expected variable; the deployment environment is the authoritative configuration.
+1. In repository Settings → Pages → Build and deployment, choose **GitHub Actions** as the source.
+2. Push to `main`, or manually run **Deploy Astro to GitHub Pages** in the Actions tab.
+3. Wait for both `build` and `deploy` jobs to succeed.
+4. Open https://limeng05.github.io/astro-directory-starter/.
 
-Before production, run `SITE_URL=https://your-domain.example npm test`. Verify the homepage, `/directory/2/`, a category page, a tool page, `/sitemap.xml`, `/robots.txt`, and an unknown URL. Cloudflare Pages serves the generated `404.html` for missing pages.
+The workflow uses the official Astro action to install dependencies, build, and upload the Pages artifact. The deployment job publishes that artifact using GitHub's Pages action. Deployments are serialized to avoid overlapping publication.
 
-For preview deployments, be aware that the built canonical URL uses `SITE_URL`. Set preview-specific indexing rules in your hosting configuration if previews are public.
+For your own fork, update `site` to your GitHub Pages origin and `base` to your repository name. For a custom domain at the root, change `site` to that origin and `base` to `/`. Update the expected origin/base in `scripts/verify-build.mjs` too.
+
+Run `npm test` before pushing. Verify the homepage, the second directory page, category and tool pages, CSS and JavaScript loading, and sitemap URLs after deployment. GitHub Pages only reads `robots.txt` at the origin root; the copy under this project subpath is informational. The sitemap can be submitted using its full project URL.
+
+Reference: [Astro deployment to GitHub Pages](https://docs.astro.build/en/guides/deploy/github/).
+
+## Cloudflare Pages (alternative)
+
+The project outputs static HTML and does not need an SSR adapter. Change `site` to your Cloudflare/custom origin and `base` to `/`, then update test expectations.
+
+Connect the repository in Cloudflare Pages. Set the build command to `npm run build`, output directory to `dist`, and build environment `NODE_VERSION` to `24`. Use the repository root as the build root. Rebuild after changing the public origin.
 
 Reference: [Astro deployment to Cloudflare](https://docs.astro.build/en/guides/deploy/cloudflare/).

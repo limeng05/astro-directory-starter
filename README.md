@@ -21,7 +21,7 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:4321`. Edit `src/data/tools.ts` to add or change tools.
+Open `http://localhost:4321/astro-directory-starter/`. Edit `src/data/tools.ts` to add or change tools.
 
 ```sh
 npm test       # Type checking, production build, generated-page verification
@@ -29,11 +29,13 @@ npm run build # Output: dist/
 npm run preview
 ```
 
-Set `SITE_URL` to your public origin before a production build; the development fallback is `https://example.com`.
+## Live demo and deployment
 
-```sh
-SITE_URL=https://directory.your-domain.com npm run build
-```
+[Open the GitHub Pages demo](https://limeng05.github.io/astro-directory-starter/).
+
+The default configuration targets this repository's GitHub Pages URL. Set `site` and `base` in `astro.config.mjs` when using your own repository or domain. For a custom domain hosted at its root, use `base: '/'`.
+
+The deployment workflow runs on pushes to `main`. In repository Settings → Pages, select **GitHub Actions** as the build source. See [deployment instructions](docs/deployment.md).
 
 ## Project structure
 
@@ -71,7 +73,7 @@ This approach is inspired by two directory projects I'm working on. They are edi
 
 - [Architecture and adding tools](docs/architecture.md)
 - [SEO and editorial practices](docs/seo.md)
-- [Deploy to Cloudflare Pages](docs/deployment.md)
+- [Deploy to GitHub Pages or Cloudflare Pages](docs/deployment.md)
 - [Repository publishing checklist](docs/publishing.md)
 - [Contributing](CONTRIBUTING.md)
 

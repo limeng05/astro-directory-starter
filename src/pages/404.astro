@@ -1,4 +1,5 @@
 ---
+import { withBase } from "../lib/paths";
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Page not found" description="This page could not be found." noindex><section class="page-heading"><p class="eyebrow">404</p><h1>A small detour.</h1><p>We couldn’t find that page.</p><a class="button" href="/">Back to the collection →</a></section></Layout>
+<Layout title="Page not found" description="This page could not be found." noindex><section class="page-heading"><p class="eyebrow">404</p><h1>A small detour.</h1><p>We couldn’t find that page.</p><a class="button" href={withBase('/')}>Back to the collection →</a></section></Layout>

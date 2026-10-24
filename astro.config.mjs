@@ -1,8 +1,8 @@
 import { defineConfig } from 'astro/config';
 
-// Set SITE_URL to your production origin before deploying.
 export default defineConfig({
-  site: process.env.SITE_URL || 'https://example.com',
+  site: 'https://limeng05.github.io',
+  base: '/astro-directory-starter',
   output: 'static',
   trailingSlash: 'always',
 });
