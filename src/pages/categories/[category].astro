@@ -1,0 +1,12 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ToolCard from '../../components/ToolCard.astro';
+import { categories, tools } from '../../data/tools';
+export function getStaticPaths() { return categories.map(category => ({ params: { category: category.slug }, props: { category } })); }
+const { category } = Astro.props;
+const selected = tools.filter(tool => tool.category === category.slug);
+---
+<Layout title={`${category.name} tools`} description={category.description}>
+<section class="page-heading"><a href="/">← All resources</a><p class="eyebrow">EXPLORE A CATEGORY</p><h1>{category.name}</h1><p>{category.description} {selected.length} resources to explore.</p></section>
+<div class="grid">{selected.map(tool => <ToolCard tool={tool} />)}</div>
+</Layout>

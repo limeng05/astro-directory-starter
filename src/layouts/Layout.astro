@@ -1,0 +1,32 @@
+---
+import '../styles/global.css';
+interface Props { title: string; description: string; noindex?: boolean; }
+const { title, description, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} | Directory Starter</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header wrap">
+      <a href="/" class="brand"><span class="brand-icon">↗</span> directory<span class="muted">/starter</span></a>
+      <nav aria-label="Main"><a href="/directory/1/">Browse tools</a><a href="/about/">About this starter ↗</a></nav>
+    </header>
+    <main id="main" class="wrap"><slot /></main>
+    <footer class="wrap"><span>A small directory. A useful starting point.</span><a href="https://github.com/limeng05/astro-directory-starter">Source on GitHub ↗</a></footer>
+  </body>
+</html>

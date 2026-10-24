@@ -1,0 +1,11 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Directory from '../components/Directory.astro';
+import { categories } from '../data/tools';
+---
+<Layout title="Good tools, a little closer" description="An open-source Astro directory starter with searchable tools, categories, static pagination, and useful detail pages.">
+  <section class="hero"><p class="eyebrow">AN OPEN-SOURCE ASTRO STARTER</p><h1>Good tools.<br /><em>A little closer.</em></h1><p class="intro">A considered collection of resources for building, creating, and discovering. Explore the demo. Make it your own.</p><a class="button" href="#browse-title">Find your next tool <span>↓</span></a><div class="hero-note"><span class="spark">✳</span><span>Small by design.<br />Ready to grow.</span></div></section>
+  <div class="category-links" aria-label="Browse by category">{categories.map(c => <a href={`/categories/${c.slug}/`}>{c.name} <span>↗</span></a>)}</div>
+  <Directory />
+  <aside class="callout"><div><p class="eyebrow">BUILT TO BE USEFUL</p><h2>Your next directory starts here.</h2><p>Typed data, static pages, and room for your own ideas.</p></div><a href="/about/">See how it works ↗</a></aside>
+</Layout>

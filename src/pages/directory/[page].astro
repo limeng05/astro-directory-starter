@@ -1,0 +1,14 @@
+---
+import type { GetStaticPaths, Page } from 'astro';
+import Layout from '../../layouts/Layout.astro';
+import ToolCard from '../../components/ToolCard.astro';
+import { tools, PAGE_SIZE, type Tool } from '../../data/tools';
+export const getStaticPaths = (({ paginate }) => paginate(tools, { pageSize: PAGE_SIZE })) satisfies GetStaticPaths;
+interface Props { page: Page<Tool>; }
+const { page } = Astro.props;
+---
+<Layout title={`All tools — Page ${page.currentPage}`} description={`Browse page ${page.currentPage} of ${page.lastPage} in our example tool directory.`}>
+  <section class="page-heading"><p class="eyebrow">THE DIRECTORY</p><h1>Tools worth a look.</h1><p>Page {page.currentPage} of {page.lastPage} · {page.total} resources</p><a href="/">Search the entire collection →</a></section>
+  <div class="grid">{page.data.map(tool => <ToolCard tool={tool} />)}</div>
+  <nav class="pagination" aria-label="Pagination">{page.url.prev && <a href={page.url.prev}>← Previous</a>}{Array.from({ length: page.lastPage }, (_, i) => <a href={`/directory/${i + 1}/`} aria-current={page.currentPage === i + 1 ? 'page' : undefined}>{i + 1}</a>)}{page.url.next && <a href={page.url.next}>Next →</a>}</nav>
+</Layout>

@@ -1,0 +1,42 @@
+---
+import ToolCard from './ToolCard.astro';
+import { tools, categories } from '../data/tools';
+---
+<section aria-labelledby="browse-title" class="directory">
+  <div class="section-heading"><h2 id="browse-title">The collection</h2><span>{tools.length} handpicked resources</span></div>
+  <form class="filters" role="search" onsubmit="return false">
+    <div><label for="search">Search the collection</label><input id="search" type="search" placeholder="Try “design” or “documentation”…" /></div>
+    <div><label for="category">Category</label><select id="category"><option value="">All categories</option>{categories.map(c => <option value={c.slug}>{c.name}</option>)}</select></div>
+    <button type="reset">Reset</button>
+  </form>
+  <p id="results" class="result-count" role="status" aria-live="polite">Showing all {tools.length} resources</p>
+  <div class="grid">{tools.map(tool => <ToolCard tool={tool} />)}</div>
+  <p id="empty" hidden>No tools found. Try a different search or category.</p>
+  <noscript><p>All tools are visible. Search and filtering require JavaScript; category pages and pagination work without it.</p></noscript>
+</section>
+<script>
+  const search = document.querySelector<HTMLInputElement>('#search')!;
+  const category = document.querySelector<HTMLSelectElement>('#category')!;
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-tool]')];
+  const params = new URLSearchParams(location.search);
+  search.value = params.get('q') || '';
+  category.value = params.get('category') || '';
+  function filter() {
+    const query = search.value.trim().toLowerCase();
+    let count = 0;
+    for (const card of cards) {
+      card.hidden = !(card.dataset.search!.includes(query) && (!category.value || card.dataset.category === category.value));
+      if (!card.hidden) count++;
+    }
+    document.querySelector('#results')!.textContent = `Showing ${count} of ${cards.length} resources`;
+    (document.querySelector('#empty') as HTMLElement).hidden = count !== 0;
+    const next = new URLSearchParams();
+    if (search.value) next.set('q', search.value);
+    if (category.value) next.set('category', category.value);
+    history.replaceState(null, '', location.pathname + (next.size ? `?${next}` : '') + location.hash);
+  }
+  search.addEventListener('input', filter);
+  category.addEventListener('change', filter);
+  document.querySelector('form')!.addEventListener('reset', () => { search.value = ''; category.value = ''; filter(); });
+  filter();
+</script>
